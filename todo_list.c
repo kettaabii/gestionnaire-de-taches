@@ -101,6 +101,30 @@ void Modifier() {
     }
 }
 
+void Supprimer() {
+    rechercher();
+
+    if (ires != -1) {
+        for (int i = ires; i < taille - 1; i++) {
+            strcpy(T[i].titre, T[i + 1].titre);
+            strcpy(T[i].description, T[i + 1].description);
+            strcpy(T[i].priorite, T[i + 1].priorite);
+            T[i].Date = T[i + 1].Date;
+            T[i].status = T[i + 1].status;
+        }
+
+        strcpy(T[taille - 1].titre, "");
+        strcpy(T[taille - 1].description, "");
+        strcpy(T[taille - 1].priorite, "");
+
+        taille--;
+
+        printf("La tache a ete supprimee avec succes.\n");
+    } else {
+        printf("La tache n'existe pas.\n");
+    }
+}
+
 
 void menu() {
     int choix;
