@@ -1,5 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
+int ires = 0;
+
 typedef struct {
     int heure;
     int jour;
@@ -12,6 +17,7 @@ typedef enum {
     IN_PROGRESS,
     COMPLETED
 } TaskStatus;
+
 typedef struct {
     char titre[50];
     char description[200];
@@ -19,9 +25,11 @@ typedef struct {
     DateEcheance Date;
     TaskStatus status;
 } Tache;
-}Tache;
-int main() {
 
+int taille = 0;
+Tache T[4];
+
+void Afficher() {
     printf("Les taches sont\n");
     for (int i = 0; i < taille; i++) {
         printf("Titre: %s\n", T[i].titre);
@@ -32,5 +40,66 @@ int main() {
     }
 }
 
+void Ajouter() {
+    printf("Entrer le titre de la tache\n");
+    scanf(" %[^\n]s", T[taille].titre);
+
+    printf("Entrer la description de la tache\n");
+    scanf(" %[^\n]s", T[taille].description);
+
+    printf("Veuillez choisir la priorite\n");
+    scanf(" %[^\n]s", T[taille].priorite);
+
+    printf("Veuillez entrer la date d'echeance (jj/mm/yy)\n");
+    scanf("%d/%d/%d", &T[taille].Date.jour, &T[taille].Date.mois, &T[taille].Date.annee);
+
+    printf("Veuillez choisir le statut de la tache (0: A venir, 1: En cours, 2: Complete)\n");
+    scanf("%d", &T[taille].status);
+
+    taille++;
+}
+
+
+void menu() {
+    int choix;
+
+    do {
+        printf("#############<<To Do List>>###############\n");
+        printf("Veuillez choisir:\n 1- Ajouter une tache\n 2- Afficher la liste des Taches\n");
+        printf(" 3- Modifier une Tache\n 4- Supprimer une Tache\n 5- Ordonner les taches\n 6- Quitter\n");
+
+        scanf("%d", &choix);
+
+        switch (choix) {
+            case 1:
+                Ajouter();
+                break;
+            case 2:
+                Afficher();
+                break;
+            case 3:
+                Modifier();
+                break;
+            case 4:
+                Supprimer();
+                break;
+            case 5:
+                Ordonner();
+                break;
+            case 6:
+                printf("Au revoir!\n");
+                break;
+            default:
+                printf("Choix invalide. Veuillez reessayer.\n");
+        }
+    } while (choix != 6);
+}
+
+
+
+
+int main() {
+    menu();
     return 0;
 }
+
