@@ -59,6 +59,48 @@ void Ajouter() {
     taille++;
 }
 
+void rechercher() {
+    char Nom_Chercher[50];
+    printf("Rentrer le titre de la tache a rechercher: ");
+    scanf(" %[^\n]s", Nom_Chercher);
+
+    ires = -1;
+    for (int i = 0; i < taille; i++) {
+        if (strcmp(T[i].titre, Nom_Chercher) == 0) {
+            ires = i;
+            break;
+        }
+    }
+}
+
+void Modifier() {
+    rechercher();
+
+    if (ires != -1) {
+        printf("La tache existe a l'indice %d.\n", ires + 1);
+        printf("Veuillez entrer la nouvelle information pour la tache:\n");
+
+        printf("Nouveau titre: ");
+        scanf(" %[^\n]s", T[ires].titre);
+
+        printf("Nouvelle description: ");
+        scanf(" %[^\n]s", T[ires].description);
+
+        printf("Nouvelle priorite: ");
+        scanf(" %[^\n]s", T[ires].priorite);
+
+        printf("Nouvelle date d'echeance (jj/mm/yy): ");
+        scanf("%d/%d/%d", &T[ires].Date.jour, &T[ires].Date.mois, &T[ires].Date.annee);
+
+        printf("Nouveau statut (0: a venir , 1: En cours, 2: faite): ");
+        scanf("%d", &T[ires].status);
+
+        printf("La tache a ete modifiee avec succes.\n");
+    } else {
+        printf("La tache n'existe pas.\n");
+    }
+}
+
 
 void menu() {
     int choix;
