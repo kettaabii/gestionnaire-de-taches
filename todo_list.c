@@ -125,7 +125,60 @@ void Supprimer() {
     }
 }
 
+void Ordonner_Date_C() {
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (T[j].Date.annee > T[j + 1].Date.annee ||
+                (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois > T[j + 1].Date.mois) ||
+                (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
+                 T[j].Date.jour > T[j + 1].Date.jour)) {
 
+
+                Tache temp = T[j+1];
+                T[j+1] = T[j];
+                T[j ] = temp;
+            }
+        }
+    }}
+void Ordonner_Date_D() {
+    for (int i = 0; i < taille - 1; i++) {
+        for (int j = 0; j < taille - i - 1; j++) {
+            if (T[j].Date.annee > T[j + 1].Date.annee ||
+                (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois > T[j + 1].Date.mois) ||
+                (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
+                 T[j].Date.jour > T[j + 1].Date.jour)) {
+
+
+                Tache temp = T[j];
+                T[j] = T[j+1];
+                T[j+1 ] = temp;
+            }
+        }
+    }
+
+    printf("Les taches ont ete triees par date d'echeance.\n");
+}
+void Ordonner(){
+    int ChoixOrdre; 
+    printf("***********Ordonner******* \n 1- Selon Date echeance \n 2-Selon titre \n 3-Retour au Menu Principal\n" );
+    scanf("%d",&ChoixOrdre);
+    switch (ChoixOrdre)
+    {
+    case 1:
+        Ordonner_Date_C();
+        break;
+    case 2:
+        Ordonner_Date_D();
+        break;
+    case 3:
+        menu();
+        break;
+    
+    default:
+        printf("llayhdik");
+        break;
+    }
+}
 void menu() {
     int choix;
 
