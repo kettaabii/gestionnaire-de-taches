@@ -13,9 +13,9 @@ typedef struct {
 } DateEcheance;
 
 typedef enum {
-    NOT_STARTED,
-    IN_PROGRESS,
-    COMPLETED
+    Pas_Encore=0,
+    IN_PROGRESS=1,
+    COMPLETED=2
 } TaskStatus;
 
 typedef struct {
@@ -35,7 +35,7 @@ void Afficher() {
         printf("Titre: %s\n", T[i].titre);
         printf("Description: %s\n", T[i].description);
         printf("Priorite: %s\n", T[i].priorite);
-        printf("Status: %d\n", T[i].status);
+        printf("Status: %s\n", T[i].status);
         printf("Date d'echeance: %d/%d/%d\n", T[i].Date.jour, T[i].Date.mois, T[i].Date.annee);
     }
 }
@@ -139,7 +139,9 @@ void Ordonner_Date_C() {
                 T[j ] = temp;
             }
         }
-    }}
+    }
+    
+     }
 void Ordonner_Date_D() {
     for (int i = 0; i < taille - 1; i++) {
         for (int j = 0; j < taille - i - 1; j++) {
