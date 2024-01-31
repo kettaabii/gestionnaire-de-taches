@@ -2,11 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-int i,ipro;
+
 int ires = 0;
-int temp;
-int choixPriorite;
-int choixStatus;
 
 typedef struct {
     int heure;
@@ -19,7 +16,7 @@ typedef struct {
     char titre[50];
     char description[200];
     char priorite[30];
-    char status[15];  
+    char status[15];  // Utiliser une chaîne de caractères pour représenter le statut
     DateEcheance Date;
 } Tache;
 
@@ -28,25 +25,26 @@ Tache T[4];
 
 bool estDateValide(int jour, int mois, int annee) {
     if (annee < 2024) {
-        return false;  
+        return false;  // Année invalide
     }
 
     if (mois < 1 || mois > 12) {
-        return false; 
+        return false;  // Mois invalide
     }
 
     switch (mois) {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-            return (jour >= 1 && jour <= 31);  
+            return (jour >= 1 && jour <= 31);  // Mois avec 31 jours
         case 4: case 6: case 9: case 11:
-            return (jour >= 1 && jour <= 30);  
+            return (jour >= 1 && jour <= 30);  // Mois avec 30 jours
         case 2:
-           
-            return (jour >= 1 && jour <= 29);  
+            // Ignorer la condition de l'année bissextile
+            return (jour >= 1 && jour <= 29);  // Février avec 29 jours (maximum)
     }
 
-    return false;  
+    return false;  // Conditions par défaut, au cas où
 }
+
 void Afficher() {
     printf("Les taches sont\n");
     for (int i = 0; i < taille; i++) {
@@ -58,50 +56,6 @@ void Afficher() {
     }
 }
 
-void  Prioritee(){  ///////////////////////////////////////////////
-    printf("1- Faible\n");
-    printf("2- Moyenne\n");
-    printf("3- Haute\n");
-    scanf("%d", &choixPriorite);
-    switch (choixPriorite) {
-        case 1:
-            strcpy(T[i].priorite, "Faible");
-            break;
-        case 2:
-            strcpy(T[i].priorite, "Moyenne");
-            break;
-        case 3:
-            strcpy(T[i].priorite, "Haute");
-            break;
-        default:
-            strcpy(T[i].priorite, "Non specifiee");
-            break;
-    }
-
-       ipro=i;  
-
-//    printf("+++++++++++Priorite: %s\n", T[taille].priorite);
-}
-void FStatus(){
-    printf(" \n1-En cours\n2-Terminee\n3-Blockage: ");
-    scanf("%d", &choixStatus);
-    switch (choixStatus) {
-        case 1:
-            strcpy(T[i].status, "En Cours");
-            break;
-        case 2:
-            strcpy(T[i].status, "Terminee");
-            break;
-        case 3:
-            strcpy(T[i].status, "Blocage");
-            break;
-        default:
-            strcpy(T[i].status, "Non specifiee");
-            break;
-    }
-
-}
-
 void Ajouter() {
     printf("Entrer le titre de la tache\n");
     scanf(" %[^\n]s", T[taille].titre);
@@ -109,21 +63,39 @@ void Ajouter() {
     printf("Entrer la description de la tache\n");
     scanf(" %[^\n]s", T[taille].description);
 
-    int choixStatus;
-    
+    // Choisissez la priorité
+    int choixPriorite;
     printf("Choisissez la priorite :\n");
-    Prioritee();
-    printf("++-------Priorite: %s\n", T[taille].priorite);
-/////////////////////////////////////////////////////
+    printf("1- Faible\n");
+    printf("2- Moyenne\n");
+    printf("3- Haute\n");
+    scanf("%d", &choixPriorite);
 
+    switch (choixPriorite) {
+        case 1:
+            strcpy(T[taille].priorite, "Faible");
+            break;
+        case 2:
+            strcpy(T[taille].priorite, "Moyenne");
+            break;
+        case 3:
+            strcpy(T[taille].priorite, "Haute");
+            break;
+        default:
+            strcpy(T[taille].priorite, "Non specifiee");
+            break;
+    }
+
+    // Saisie de la date d'échéance avec vérification
     do {
         printf("Veuillez entrer la date d'echeance (jj/mm/yy)\n");
         scanf("%d/%d/%d", &T[taille].Date.jour, &T[taille].Date.mois, &T[taille].Date.annee);
     } while (!estDateValide(T[taille].Date.jour, T[taille].Date.mois, T[taille].Date.annee));
 
-    
-    printf("Veuillez choisir le statut de la tache\n");
-    FStatus();
+    // Choisissez le statut comme une chaîne de caractères
+    printf("Veuillez choisir le statut de la tache (A venir, En cours, Complete): ");
+    scanf(" %[^\n]s", T[taille].status);
+
     taille++;
 }
 
@@ -143,32 +115,26 @@ void rechercher() {
 
 void Modifier() {
     rechercher();
-        
+
     if (ires != -1) {
         printf("La tache existe a l'indice %d.\n", ires + 1);
         printf("Veuillez entrer la nouvelle information pour la tache:\n");
 
         printf("Nouveau titre: ");
         scanf(" %[^\n]s", T[ires].titre);
-        
 
         printf("Nouvelle description: ");
         scanf(" %[^\n]s", T[ires].description);
 
-        printf("Nouvelle priorite: \n ");
-         Prioritee();
-        ////////////////////////////////////////////
-        ////////////////////////////////////////////////////////
-        ///////////////////////////////////////////
+        printf("Nouvelle priorite: ");
+        scanf(" %[^\n]s", T[ires].priorite);
 
-        do {
         printf("Nouvelle date d'echeance (jj/mm/yy): ");
-        scanf("%d/%d/%d", &T[taille].Date.jour, &T[taille].Date.mois, &T[taille].Date.annee);
-    } while (!estDateValide(T[taille].Date.jour, T[taille].Date.mois, T[taille].Date.annee));
+        scanf("%d/%d/%d", &T[ires].Date.jour, &T[ires].Date.mois, &T[ires].Date.annee);
 
-        
-        printf("Nouveau statut :\n ");
-        FStatus();
+        // Choisissez le statut comme une chaîne de caractères
+        printf("Nouveau statut (A venir, En cours, Complete): ");
+        scanf(" %[^\n]s", T[ires].status);
 
         printf("La tache a ete modifiee avec succes.\n");
     } else {
@@ -185,14 +151,15 @@ void Supprimer() {
             strcpy(T[i].description, T[i + 1].description);
             strcpy(T[i].priorite, T[i + 1].priorite);
             T[i].Date = T[i + 1].Date;
+            // Copier le statut en tant que chaîne de caractères
             strcpy(T[i].status, T[i + 1].status);
         }
 
-        
+        // Vider les valeurs de la dernière tâche
         strcpy(T[taille - 1].titre, "");
         strcpy(T[taille - 1].description, "");
         strcpy(T[taille - 1].priorite, "");
-        
+        // Statut à vider également comme une chaîne de caractères
         strcpy(T[taille - 1].status, "");
 
         taille--;
@@ -211,15 +178,15 @@ void Ordonner_Date_C() {
                 (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
                  T[j].Date.jour > T[j + 1].Date.jour)) {
 
-                
+                // Échange des tâches
                 Tache temp = T[j + 1];
                 T[j + 1] = T[j];
                 T[j] = temp;
             }
-            
+            // Ajout d'une condition de comparaison du statut
             else if (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
                      T[j].Date.jour == T[j + 1].Date.jour && strcmp(T[j].status, T[j + 1].status) > 0) {
-                
+                // Échange des tâches
                 Tache temp = T[j + 1];
                 T[j + 1] = T[j];
                 T[j] = temp;
@@ -238,15 +205,15 @@ void Ordonner_Date_D() {
                 (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
                  T[j].Date.jour < T[j + 1].Date.jour)) {
 
-                
+                // Échange des tâches
                 Tache temp = T[j];
                 T[j] = T[j + 1];
                 T[j + 1] = temp;
             }
-            
+            // Ajout d'une condition de comparaison du statut
             else if (T[j].Date.annee == T[j + 1].Date.annee && T[j].Date.mois == T[j + 1].Date.mois &&
                      T[j].Date.jour == T[j + 1].Date.jour && strcmp(T[j].status, T[j + 1].status) < 0) {
-                
+                // Échange des tâches
                 Tache temp = T[j];
                 T[j] = T[j + 1];
                 T[j + 1] = temp;
@@ -259,7 +226,7 @@ void Ordonner_Date_D() {
 
 void Ordonner() {
     int ChoixOrdre;
-    printf("***********Ordonner******* \n 1- Selon Date croissante \n 2-Selon Date decroissante \n 3-Retour au Menu Principal\n");
+    printf("***********Ordonner******* \n 1- Selon Date echeance \n 2-Selon titre \n 3-Retour au Menu Principal\n");
     scanf("%d", &ChoixOrdre);
     switch (ChoixOrdre) {
         case 1:
@@ -292,39 +259,7 @@ void FiltrerParDate() {
         }
     }
 }
-void FiltrerParPriorite(){
-     printf("choisir la priotiter :"); 
-    
 
-     for(i=0;i<taille;i++){
-         Prioritee(); 
-        if(i==ipro){
-            printf("Titre: %s\n", T[i].titre);
-            printf("Description: %s\n", T[i].description);
-            printf("Priorite: %s\n", T[i].priorite);
-            printf("Status: %s\n", T[i].status);
-            printf("Date d'echeance: %d/%d/%d\n", T[i].Date.jour, T[i].Date.mois, T[i].Date.annee);
-            Prioritee(); 
-        }
-        else {printf("llayhdik");}
-     }
-
-
-
-}
-void Filtrer(){
-    int ChoixFiltrage;
-    printf("comment vous voulez fitrer les taches ? \n1-Par Date\n2-Par priorite\n3-Par Status");
-    scanf("%d",&ChoixFiltrage);
-    switch(ChoixFiltrage){
-        case 1: 
-        FiltrerParDate();
-        break;
-        case 2 : 
-        FiltrerParPriorite();
-        break;
-    }
-}
 void MenuPrincipal() {
     int choix;
     do {
@@ -347,7 +282,7 @@ void MenuPrincipal() {
                 Ordonner();
                 break;
             case 6:
-                Filtrer();
+                FiltrerParDate();
                 break;
             case 7:
                 printf("Merci d'avoir utilise l'application\n");
